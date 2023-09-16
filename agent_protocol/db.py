@@ -40,6 +40,7 @@ class TaskDB(ABC):
         input: Optional[str] = None,
         is_last: bool = False,
         additional_properties: Optional[Dict[str, str]] = None,
+        artifacts: List[Artifact] = [],
     ) -> Step:
         raise NotImplementedError
 
@@ -47,6 +48,7 @@ class TaskDB(ABC):
         self,
         task_id: str,
         file_name: str,
+        agent_created: bool = True,
         relative_path: Optional[str] = None,
         step_id: Optional[str] = None,
     ) -> Artifact:
@@ -102,6 +104,7 @@ class InMemoryTaskDB(TaskDB):
         input: Optional[str] = None,
         is_last=False,
         additional_properties: Optional[Dict[str, Any]] = None,
+        artifacts: List[Artifact] = [],
     ) -> Step:
         step_id = str(uuid.uuid4())
         step = Step(
@@ -112,6 +115,7 @@ class InMemoryTaskDB(TaskDB):
             status=Status.created,
             is_last=is_last,
             additional_properties=additional_properties,
+            artifacts=artifacts,
         )
         task = await self.get_task(task_id)
         task.steps.append(step)
@@ -143,12 +147,16 @@ class InMemoryTaskDB(TaskDB):
         self,
         task_id: str,
         file_name: str,
+        agent_created: bool = True,
         relative_path: Optional[str] = None,
         step_id: Optional[str] = None,
     ) -> Artifact:
         artifact_id = str(uuid.uuid4())
         artifact = Artifact(
-            artifact_id=artifact_id, file_name=file_name, relative_path=relative_path
+            artifact_id=artifact_id,
+            agent_created=agent_created,
+            file_name=file_name,
+            relative_path=relative_path
         )
         task = await self.get_task(task_id)
         task.artifacts.append(artifact)

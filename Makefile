@@ -4,7 +4,8 @@ generate:
 	poetry run fastapi-codegen \
 		--generate-routers \
 		--input openapi.yml \
-		--output agent_protocol
+		--output agent_protocol \
+		--template-dir codegen
 	rm openapi.yml
 	mv agent_protocol/main.py agent_protocol/server.py
 	rm -rf agent_protocol/routers

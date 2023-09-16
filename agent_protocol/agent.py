@@ -16,6 +16,9 @@ from .models import (
     StepRequestBody,
     Artifact,
     Status,
+    TaskListResponse,
+    TaskStepsListResponse,
+    Pagination,
 )
 
 
@@ -47,12 +50,23 @@ async def create_agent_task(body: TaskRequestBody | None = None) -> Task:
     return task
 
 
-@base_router.get("/agent/tasks", response_model=List[str], tags=["agent"])
-async def list_agent_tasks_ids() -> List[str]:
+@base_router.get("/agent/tasks", response_model=TaskListResponse, tags=["agent"])
+async def list_agent_tasks_ids(page_size: int = 10, current_page: int = 1) -> List[str]:
     """
     List all tasks that have been created for the agent.
     """
-    return [task.task_id for task in await Agent.db.list_tasks()]
+    tasks = await Agent.db.list_tasks()
+    start_index = (current_page - 1) * page_size
+    end_index = start_index + page_size
+    return TaskListResponse(
+        tasks=tasks[start_index:end_index],
+        pagination=Pagination(
+            total_items=len(tasks),
+            total_pages=len(tasks) // page_size,
+            current_page=current_page,
+            page_size=page_size,
+        ),
+    )
 
 
 @base_router.get("/agent/tasks/{task_id}", response_model=Task, tags=["agent"])
@@ -65,15 +79,27 @@ async def get_agent_task(task_id: str) -> Task:
 
 @base_router.get(
     "/agent/tasks/{task_id}/steps",
-    response_model=List[str],
+    response_model=TaskStepsListResponse,
     tags=["agent"],
 )
-async def list_agent_task_steps(task_id: str) -> List[str]:
+async def list_agent_task_steps(
+    task_id: str, page_size: int = 10, current_page: int = 1
+) -> List[str]:
     """
     List all steps for the specified task.
     """
     task = await Agent.db.get_task(task_id)
-    return [s.step_id for s in task.steps]
+    start_index = (current_page - 1) * page_size
+    end_index = start_index + page_size
+    return TaskStepsListResponse(
+        steps=task.steps[start_index:end_index],
+        pagination=Pagination(
+            total_items=len(task.steps),
+            total_pages=len(task.steps) // page_size,
+            current_page=current_page,
+            page_size=page_size,
+        ),
+    )
 
 
 @base_router.post(
@@ -148,7 +174,12 @@ async def upload_agent_task_artifacts(
     """
     file_name = file.filename or str(uuid4())
     await Agent.db.get_task(task_id)
-    artifact = await Agent.db.create_artifact(task_id, file_name, relative_path)
+    artifact = await Agent.db.create_artifact(
+        task_id=task_id,
+        agent_created=False,
+        file_name=file_name,
+        relative_path=relative_path,
+    )
 
     path = Agent.get_artifact_folder(task_id, artifact)
     if not os.path.exists(path):

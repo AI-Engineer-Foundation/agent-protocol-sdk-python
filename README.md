@@ -44,7 +44,7 @@ By default, the SDK stores data in memory. You can customize the database by set
 Agent.db = your_database
 ```
 
-The database object must implement the methods from [db.py](./agent/python/db.py).
+The database object must implement the methods from [db.py](./agent_protocol/db.py).
 
 ### Routes
 

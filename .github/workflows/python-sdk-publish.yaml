@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-20.04
     defaults:
       run:
-        working-directory: ./sdk/python/
+        working-directory: ./
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
