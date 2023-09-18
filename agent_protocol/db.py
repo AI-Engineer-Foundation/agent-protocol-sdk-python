@@ -1,7 +1,7 @@
 import uuid
 from abc import ABC
 from typing import Dict, List, Optional, Any
-from .models import Task as APITask, Step as APIStep, Artifact, Status
+from .models import Task as APITask, Step as APIStep, Artifact, Status, NotFoundResponse
 
 
 class Step(APIStep):
@@ -20,7 +20,9 @@ class NotFoundException(Exception):
     def __init__(self, item_name: str, item_id: str):
         self.item_name = item_name
         self.item_id = item_id
-        super().__init__(f"{item_name} with {item_id} not found.")
+        super().__init__(NotFoundResponse(
+            message=f"{item_name} with {item_id} not found."
+        ))
 
 
 class TaskDB(ABC):

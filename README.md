@@ -1,6 +1,6 @@
-# Agent Communication Protocol - Python SDK
+# Agent Protocol - Python SDK
 
-SDK with our implementation of the Agent Communication Protocol in Python, allows you to easily wrap your agent in a webserver compatible with the protocol - you only need to define an agent task and step handlers.
+Reference implementation of the Agent Protocol in Python by the AI Engineers Foundation (AIEF). This SDK allows you to easily wrap your agent in a webserver compatible with the protocol - you only need to define the task and step handlers for your agent.
 
 ## Installation
 
