@@ -12,7 +12,7 @@ from agent_protocol.middlewares import not_found_exception_handler
 app = FastAPI(
     title="Agent Communication Protocol",
     description="Specification of the API protocol for communication with an agent.",
-    version="v0.4",
+    version="v1",
 )
 
 app.add_exception_handler(NotFoundException, not_found_exception_handler)
