@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "agent_protocol"
-version = "1.0.0"
+version = "1.0.1"
 description = "API for interacting with Agents that use the Agent Protocol"
 authors = ["AI Engineers Foundation <aiengineersfoundation@gmail.com>"]
 license = "MIT"
@@ -10,7 +10,7 @@ repository = "https://github.com/AI-Engineers-Foundation/agent-protocol-sdk-pyth
 packages = [{ include = "agent_protocol" }]
 
 [tool.poetry.dependencies]
-python = ">=3.7, <4.0.0"
+python = ">=3.10, <4.0.0"
 fastapi = "^0.100.0"
 hypercorn = "^0.14.4"
 pytest = "^7.0.0"
