@@ -1,3 +1,4 @@
+# THIS REPO HAS BEEN MERGED INTO THE MAIN REPO: https://github.com/AI-Engineer-Foundation/agent-protocol/tree/main/packages/sdk/python
 # Agent Protocol - Python SDK
 
 Reference implementation of the Agent Protocol in Python by the AI Engineers Foundation (AIEF). This SDK allows you to easily wrap your agent in a webserver compatible with the protocol - you only need to define the task and step handlers for your agent.
